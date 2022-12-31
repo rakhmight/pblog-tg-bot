@@ -1,0 +1,31 @@
+{
+  "name": "pblog-tg-bot2",
+  "version": "1.0.0",
+  "description": "p-blog management telegram bot",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "JS",
+    "TElegraf",
+    "p-blog"
+  ],
+  "author": "mr.rakh <mr.rakhimov@mail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.2.1",
+    "dotenv": "^16.0.3",
+    "firebase": "^8.10.1",
+    "mongoose": "^6.8.1",
+    "puppeteer": "^19.4.1",
+    "telegraf": "^4.11.2",
+    "telegraf-session-mongoose": "^2.0.6"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
