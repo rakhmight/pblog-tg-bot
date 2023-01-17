@@ -15,16 +15,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = app.firestore()
 
-const initUser = async (url)=>{
-    let avaibleDB = db.collection('user').doc('data')
-
-    if(avaibleDB){
-      await avaibleDB.delete()
-    }
-    
-    await db.collection("user").doc("data").set({
-      urlInst: url
+const initUser = async (data)=>{
+  await db.collection('user')
+  await db.collection("user").doc("data").set({
+    ...data
   })
+
+  return
 }
 
 const fillUser = async (data)=>{

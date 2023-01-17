@@ -9,7 +9,7 @@ const REPLY_TEXT = {
     notAccess: '🚫 У вас нет прав пользоваться данным ботом',
     getInst: {
         getURL: `⚡️ [1/4]\nНачнём с Instagram.\n\n✨Из вашего Instagram аккаунта будут взяты:\n• количество подписчиков 👫\n• количество публикаций 📰\n• статус (о себе) 📌\n• аватар профиля 🌠`,
-        urlFormat: `🔗 Отправьте ссылку на свою страничку в Instagram.\n➡️ Формат: https://www.instagram.com/somebody`,
+        urlFormat: `🔗 Отправьте ссылку на свою страничку в Instagram.\n➡️ Формат: @somebody`,
         delay: `⏳ Подождите 10 секунд..`,
         confirm: '👤 Это вы?'
     },

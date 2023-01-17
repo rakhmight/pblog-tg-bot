@@ -61,12 +61,8 @@ const cancelAction = async ctx =>{
 }
 
 const confirmInst = async ctx=>{
-    let msgCaption = ctx.update.callback_query.message.caption
+    await initUser(ctx.wizard.state.data)
     let msg = ctx.update.callback_query.message
-    let instURL = new RegExp(/https:\/\/www\.instagram\.com\/.*/i)
-    let matchInstUrl = msgCaption.match(instURL)
-    //matchInstUrl[0] - ссылка которую нужно сохранить в БД
-    initUser(matchInstUrl[0])
 
     await ctx.telegram.deleteMessage(msg.chat.id, msg.message_id)
     await ctx.scene.leave('setInstScene')
