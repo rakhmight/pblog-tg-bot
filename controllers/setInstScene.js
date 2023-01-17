@@ -43,20 +43,11 @@ queryInstHandler.on('text', async ctx =>{
 
         await getUserProfile(instUrl)
         .then((data)=>{
-            ctx.reply(`${REPLY_TEXT.getInst.confirm}\n| Полное имя: ${data.username}\n| Ник: ${data.nick}\n| Кол-во публикаций: ${data.publicationsCount}\n| Кол-во подписчиков: ${data.subsCount}\n| Bio: ${data.bio}`,checkInstBtn)
+            ctx.reply(`${REPLY_TEXT.getInst.confirm}\n| Полное имя: ${data.username}\n| Ник: ${data.nick}\n| Кол-во публикаций: ${data.publicationsCount}\n| Кол-во подписчиков: ${data.subsCount}\n| Bio: ${data.bio}\n🎆 Фотография установлена`,checkInstBtn)
             ctx.wizard.state.data = { ...data }
             timerIsWork = false
             ctx.telegram.deleteMessage(delayChatId,delayMsgId)
         })
-
-        // await getPic(checkInstUrl[0])
-        // setTimeout(()=>{
-        //     ctx.replyWithPhoto({source: path.join(__dirname, '..', 'media/inst.png')}, {
-        //         caption: `${REPLY_TEXT.getInst.confirm}\n${checkInstUrl[0]}`,
-        //         ...checkInstBtn
-        //     })
-        //     ctx.telegram.deleteMessage(delayChatId,delayMsgId)
-        // }, 6000)
 
     } else{
         ctx.replyWithHTML(REPLY_TEXT.getInst.urlFormat, cancelSetInstBtn)

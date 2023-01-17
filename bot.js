@@ -10,7 +10,7 @@ const { setInstScene } = require('./controllers/setInstScene')
 const { fillBlogScene } = require('./controllers/fillBlogScene')
 
 // Команды
-const { start, help, startSetInst, cancelAction, confirmInst, cancelInst, startArticlesTutorial, startCardsTutorial } = require('./controllers/commands')
+const { start, help, startSetInst, cancelAction, confirmInst, cancelInst, startArticlesTutorial, startCardsTutorial, updateInstDatas } = require('./controllers/commands')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 // Регистрация сцен
@@ -30,6 +30,7 @@ async function initBot() {
 
         .start(start)
         .help(help)
+        .command('instUpdate', updateInstDatas)
 
         .action('initBlog', startSetInst)
         .action('initInstCancel', cancelAction)

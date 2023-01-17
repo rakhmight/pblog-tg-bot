@@ -32,7 +32,31 @@ const fillUser = async (data)=>{
   })
 }
 
+const updateInst = async (data)=>{
+  let doc = db.collection('user').doc('data')
+
+  await doc.update({
+    ...data
+  })
+}
+
+const getUserNick = async () =>{
+  let result
+  await db.collection('user').doc('data')
+  .get()
+  .then((doc) => {
+       result = doc.data()
+  })
+  .catch((error) => {
+      console.log("Error getting documents: ", error)
+  })
+  
+  return result.nick
+}
+
 module.exports = {
   initUser,
-  fillUser
+  fillUser,
+  updateInst,
+  getUserNick
 }

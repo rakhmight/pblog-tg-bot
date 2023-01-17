@@ -1,7 +1,8 @@
 const checkAccess = require('../utils/checkAccess')
 const { initBlogBtn, cancelSetInstBtn } = require("../utils/buttons")
 const { REPLY_TEXT } = require("../config/consts")
-const { initUser } = require('../services/Blog')
+const { initUser, updateInst, getUserNick } = require('../services/Blog')
+const getUserProfile = require('../utils/getUserProfile')
 
 const start = async ctx =>{
     try {
@@ -101,6 +102,33 @@ const startCardsTutorial = async ctx =>{
     }
 }
 
+const updateInstDatas = async ctx =>{
+    try {
+        let msg = ctx.update.message.text
+
+        if(msg.includes('@', 11)){
+            newUrl = msg.split(' ')
+            newUrl = newUrl[1].replace('@','')
+            getUserProfile(newUrl)
+            .then(async (data)=>{
+                await updateInst(data)
+                await ctx.reply(`📝 Данные Instagram были обновлены:\n| Полное имя: ${data.username}\n| Ник: ${data.nick}\n| Кол-во публикаций: ${data.publicationsCount}\n| Кол-во подписчиков: ${data.subsCount}\n| Bio: ${data.bio}\n🎆 Фотография обновлена`)
+            })
+        } else{
+            await getUserNick()
+            .then(async (res)=>{
+                await getUserProfile(res)
+                .then(async (data)=>{
+                    await updateInst(data)
+                    await ctx.reply(`📝 Данные Instagram были обновлены:\n| Полное имя: ${data.username}\n| Ник: ${data.nick}\n| Кол-во публикаций: ${data.publicationsCount}\n| Кол-во подписчиков: ${data.subsCount}\n| Bio: ${data.bio}\n🎆 Фотография обновлена`)
+                })
+            })
+        }
+    } catch (e) {
+        console.log("\x1b[31m",`[!] (.commands>updateInstDatas) Ошибка запуска: ${e}`)
+    }
+}
+
 module.exports = {
     start,
     help,
@@ -109,5 +137,6 @@ module.exports = {
     cancelInst,
     confirmInst,
     startArticlesTutorial,
-    startCardsTutorial
+    startCardsTutorial,
+    updateInstDatas
 }
