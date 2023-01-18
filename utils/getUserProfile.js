@@ -58,6 +58,9 @@ const getUserProfile = async (user)=>{
         await browser.close()
     },1000)
 
+    profilePic = profilePic.match(/v\/.*/)
+    profilePic = profilePic[0]
+
     return {
             username,
             nick,
