@@ -43,10 +43,14 @@ queryInstHandler.on('text', async ctx =>{
 
         await getUserProfile(instUrl)
         .then((data)=>{
-            ctx.reply(`${REPLY_TEXT.getInst.confirm}\n| Полное имя: ${data.username}\n| Ник: ${data.nick}\n| Кол-во публикаций: ${data.publicationsCount}\n| Кол-во подписчиков: ${data.subsCount}\n| Bio: ${data.bio}\n🎆 Фотография установлена`,checkInstBtn)
-            ctx.wizard.state.data = { ...data }
-            timerIsWork = false
-            ctx.telegram.deleteMessage(delayChatId,delayMsgId)
+            if(!data){
+                ctx.reply('❌ Указана не верная @ссылка либо повторите попытку ещё раз')
+            } else{
+                ctx.reply(`${REPLY_TEXT.getInst.confirm}\n| Полное имя: ${data.username}\n| Ник: ${data.nick}\n| Кол-во публикаций: ${data.publicationsCount}\n| Кол-во подписчиков: ${data.subsCount}\n| Bio: ${data.bio}\n🎆 Фотография установлена`,checkInstBtn)
+                ctx.wizard.state.data = { ...data }
+                timerIsWork = false
+                ctx.telegram.deleteMessage(delayChatId,delayMsgId)
+            }
         })
 
     } else{

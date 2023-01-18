@@ -104,25 +104,37 @@ const startCardsTutorial = async ctx =>{
 
 const updateInstDatas = async ctx =>{
     try {
-        let msg = ctx.update.message.text
-
-        if(msg.includes('@', 11)){
-            newUrl = msg.split(' ')
-            newUrl = newUrl[1].replace('@','')
-            getUserProfile(newUrl)
-            .then(async (data)=>{
-                await updateInst(data)
-                await ctx.reply(`📝 Данные Instagram были обновлены:\n| Полное имя: ${data.username}\n| Ник: ${data.nick}\n| Кол-во публикаций: ${data.publicationsCount}\n| Кол-во подписчиков: ${data.subsCount}\n| Bio: ${data.bio}\n🎆 Фотография обновлена`)
-            })
-        } else{
-            await getUserNick()
-            .then(async (res)=>{
-                await getUserProfile(res)
+        if(checkAccess.check(ctx.message.from.id)){
+            let msg = ctx.update.message.text
+    
+            if(msg.includes('@', 11)){
+                newUrl = msg.split(' ')
+                newUrl = newUrl[1].replace('@','')
+                getUserProfile(newUrl)
                 .then(async (data)=>{
+                    if(!data){
+                        await ctx.reply('❌ Указана не верная @ссылка либо повторите попытку ещё раз')
+                        return
+                    }
                     await updateInst(data)
                     await ctx.reply(`📝 Данные Instagram были обновлены:\n| Полное имя: ${data.username}\n| Ник: ${data.nick}\n| Кол-во публикаций: ${data.publicationsCount}\n| Кол-во подписчиков: ${data.subsCount}\n| Bio: ${data.bio}\n🎆 Фотография обновлена`)
                 })
-            })
+            } else{
+                await getUserNick()
+                .then(async (res)=>{
+                    await getUserProfile(res)
+                    .then(async (data)=>{
+                        if(!data){
+                            await ctx.reply('❌ Указана не верная @ссылка либо повторите попытку ещё раз')
+                            return
+                        }
+                        await updateInst(data)
+                        await ctx.reply(`📝 Данные Instagram были обновлены:\n| Полное имя: ${data.username}\n| Ник: ${data.nick}\n| Кол-во публикаций: ${data.publicationsCount}\n| Кол-во подписчиков: ${data.subsCount}\n| Bio: ${data.bio}\n🎆 Фотография обновлена`)
+                    })
+                })
+            }
+        } else{
+            ctx.reply(REPLY_TEXT.notAccess)
         }
     } catch (e) {
         console.log("\x1b[31m",`[!] (.commands>updateInstDatas) Ошибка запуска: ${e}`)

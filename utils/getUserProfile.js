@@ -44,7 +44,7 @@ const getUserProfile = async (user)=>{
         if(document.querySelectorAll('img')[2]){
             return document.querySelectorAll('img')[2].getAttribute('src')
         }
-        return 'none'
+        return false
     })
     
     bio = await page.evaluate(() => {
@@ -58,6 +58,9 @@ const getUserProfile = async (user)=>{
         await browser.close()
     },1000)
 
+    if(!profilePic){
+        return false
+    }
     profilePic = profilePic.match(/v\/.*/)
     profilePic = profilePic[0]
 
