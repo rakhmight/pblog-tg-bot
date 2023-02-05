@@ -54,9 +54,88 @@ const getUserNick = async () =>{
   return result.nick
 }
 
+const updateAboutMe = async (data)=>{
+  let datas
+  await db.collection('user').doc('data')
+  .get()
+  .then((doc) => {
+      datas = doc.data()
+  })
+
+  datas.aboutMe.text = data
+
+  await db.collection('user').doc('data')
+  .update({
+    ...datas
+  })
+  return
+}
+
+const updateContact = async (data, type)=>{
+  let datas
+  await db.collection('user').doc('data')
+  .get()
+  .then((doc) => {
+      datas = doc.data()
+  })
+
+  if(type == 1){
+    datas.contacts.telegram = data
+  } else if(type == 2){
+    datas.contacts.mail = data
+  }
+
+  await db.collection('user').doc('data')
+  .update({
+    ...datas
+  })
+  return
+}
+
+const getInterests = async ()=>{
+  let result
+  await db.collection('user').doc('data')
+  .get()
+  .then((doc) => {
+      result = doc.data()
+      result = result.interestings
+  })
+
+  return result
+}
+
+const createInterest = async (emoji, name)=>{
+  let datas
+  await db.collection('user').doc('data')
+  .get()
+  .then((doc) => {
+      datas = doc.data()
+  })
+
+  datas.interestings.push({
+    name,
+    emoji
+  })
+
+  await db.collection('user').doc('data')
+  .update({
+    ...datas
+  })
+  .catch((e)=>{
+    console.error(`[!] (.services>createInt) Ошибка запроса: ${e}`);
+    return false
+  })
+
+  return datas.interestings
+}
+
 module.exports = {
   initUser,
   fillUser,
   updateInst,
-  getUserNick
+  getUserNick,
+  updateAboutMe,
+  updateContact,
+  getInterests,
+  createInterest
 }

@@ -9,7 +9,12 @@ aboutMeHandler.on('text', async ctx =>{
     ctx.wizard.state.data = {}
     let msgText = ctx.update.message.text
 
-    ctx.wizard.state.data.aboutMe = msgText
+    let aboutMe = {
+        text: msgText,
+        image: ''
+    }
+
+    ctx.wizard.state.data.aboutMe = aboutMe
 
     await ctx.reply(REPLY_TEXT.fillBlog.interestings, cancelFillBlogBtn)
     return ctx.wizard.next()
@@ -21,8 +26,21 @@ interestsHandler.on('text', async ctx=>{
     let msgText = ctx.update.message.text
 
     // !!!!! возможность дальше устанавливать эмодзи
+    let interestingsToSave = []
+    let interestings = msgText.split(',')
+
+    for(let i = 0; i != interestings.length; i++){
+        interestings[i]=interestings[i].trim()
+    }
+
+    for(let g = 0; g != interestings.length; g++){
+        interestingsToSave.push({
+            name: interestings[g],
+            emoji: ''
+        })
+    }
     
-    ctx.wizard.state.data.interestings = msgText.replace(/ /g,'').split(',')
+    ctx.wizard.state.data.interestings = interestingsToSave
 
     await ctx.reply(REPLY_TEXT.fillBlog.telegram, cancelFillBlogBtn)
     return ctx.wizard.next()
@@ -33,8 +51,10 @@ contactTelegramHandler.on('text', async ctx=>{
     //сохранить в БД
     let msgText = ctx.update.message.text
     ctx.wizard.state.data.contacts = {}
+
+    msgText = msgText.trim()
     
-    ctx.wizard.state.data.contacts.telegram = msgText
+    ctx.wizard.state.data.contacts.telegram = msgText.replace('@', '')
     
     await ctx.reply(REPLY_TEXT.fillBlog.mail, cancelFillBlogBtn)
     return ctx.wizard.next()
@@ -45,7 +65,8 @@ contactMailHandler.on('text', async ctx=>{
     //сохранить в БД
     let msgText = ctx.update.message.text
     
-    ctx.wizard.state.data.contacts.mail = msgText
+    ctx.wizard.state.data.contacts.mail = msgText.trim()
+    ctx.wizard.state.data.wallpaper = ''
 
     //console.log(ctx.wizard.state.data)
     fillUser(ctx.wizard.state.data)

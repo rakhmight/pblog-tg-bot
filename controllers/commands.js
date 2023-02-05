@@ -1,7 +1,7 @@
 const checkAccess = require('../utils/checkAccess')
 const { initBlogBtn, cancelSetInstBtn } = require("../utils/buttons")
 const { REPLY_TEXT } = require("../config/consts")
-const { initUser, updateInst, getUserNick } = require('../services/Blog')
+const { initUser, updateInst, getUserNick, updateAboutMe, updateContact, getInterests, createInterest } = require('../services/Blog')
 const getUserProfile = require('../utils/getUserProfile')
 
 const start = async ctx =>{
@@ -141,6 +141,158 @@ const updateInstDatas = async ctx =>{
     }
 }
 
+const aboutMeCom = async ctx => {
+    try {
+        if(checkAccess.check(ctx.message.from.id)){
+            let msg = ctx.update.message.text
+            msg = msg.replace('/aboutme', '')
+            msg = msg.trim()
+
+            if(msg.length == 0){
+                ctx.reply('❗️ Необходимо ввести новые данные для изменения информации о себе')
+            } else{
+                updateAboutMe(msg)
+                .then(()=>{
+                    ctx.reply('✅ Инфомация о себе была изменена')
+                })
+            }
+        } else{
+            ctx.reply(REPLY_TEXT.notAccess)
+        }
+    } catch (e) {
+        console.log("\x1b[31m",`[!] (.commands>aboutMeCom) Ошибка запуска: ${e}`)
+    }
+}
+
+const setTelegramCom = async ctx => {
+    try {
+        if(checkAccess.check(ctx.message.from.id)){
+           let msg = ctx.update.message.text
+           msg = msg.replace('/setTelegram','')
+           msg = msg.replace('@','')
+           msg = msg.replace('https://t.me/', '')
+           msg = msg.trim()
+
+           if(msg.length == 0){
+            ctx.reply('⛔️ Необходимо ввести сокращённую @ либо полную ссылку на телеграм')
+           } else{
+            updateContact(msg,1)
+            .then(()=>{
+                ctx.reply('✅ Контакт телеграма был изменён')
+            })
+           }
+        } else{
+            ctx.reply(REPLY_TEXT.notAccess)
+        }
+    } catch (e) {
+        console.log("\x1b[31m",`[!] (.commands>setTelegramCom) Ошибка запуска: ${e}`)
+    }
+}
+
+const setMailCom = async ctx => {
+    try {
+        if(checkAccess.check(ctx.message.from.id)){
+           let msg = ctx.update.message.text
+           msg = msg.replace('/setMail','')
+           msg = msg.trim()
+
+           if(msg.length == 0){
+            ctx.reply('⛔️ Необходимо ввести новый контакт почты в формате: somebody@mail.com')
+           } else{
+            updateContact(msg,2)
+            .then(()=>{
+                ctx.reply('✅ Контакт почты был изменён')
+            })
+           }
+
+        } else{
+            ctx.reply(REPLY_TEXT.notAccess)
+        }
+    } catch (e) {
+        console.log("\x1b[31m",`[!] (.commands>setMailCom) Ошибка запуска: ${e}`)
+    }
+}
+
+const showInterests = async ctx => {
+    try {
+        if(checkAccess.check(ctx.message.from.id)){
+            getInterests()
+            .then((data)=>{
+                ctx.replyWithHTML(showInterestingsList(data, 1))
+            })
+        } else{
+            ctx.reply(REPLY_TEXT.notAccess)
+        }
+    } catch (e) {
+        console.log("\x1b[31m",`[!] (.commands>showInterests) Ошибка запуска: ${e}`)
+    }
+}
+
+const addInterest = async ctx => {
+    try {
+        if(checkAccess.check(ctx.message.from.id)){
+           let msg = ctx.update.message.text
+           msg = msg.replace('/addInt','')
+           msg = msg.trim()
+
+           if(msg.length == 0){
+            ctx.reply('⛔️ Использование: /addInt <emoji> <интерес>')
+           } else{
+            let emoji = msg.split(' ')
+
+            emoji = emoji[0]
+
+            msg = msg.replace(msg[0], '')
+            msg = msg.trim()
+
+            createInterest(emoji,msg)
+            .then((data)=>{
+                if(!data){
+                    ctx.reply('⛔️ Выбранный emoji не поддерживается')
+                    return
+                }
+                ctx.replyWithHTML(showInterestingsList(data, 2))
+            })
+            
+           }
+
+        } else{
+            ctx.reply(REPLY_TEXT.notAccess)
+        }
+    } catch (e) {
+        console.log("\x1b[31m",`[!] (.commands>addInterest) Ошибка запуска: ${e}`)
+    }
+}
+
+// const TemplateCom = async ctx => {
+//     try {
+//         if(checkAccess.check(ctx.message.from.id)){
+//            let msg = ctx.update.message.text
+
+//         } else{
+//             ctx.reply(REPLY_TEXT.notAccess)
+//         }
+//     } catch (e) {
+//         console.log("\x1b[31m",`[!] (.commands>TemplateCom) Ошибка запуска: ${e}`)
+//     }
+// }
+
+
+function showInterestingsList (data, status){
+    let result
+    if(status == 1){
+        result = '📜 Список интересов:\n'
+    } else if(status = 2){
+        result = '✅ Список интересов обновлён:\n'
+    }
+
+    for(let i = 0; i != data.length; i++){
+        result+=`\n${i}. ${data[i].name} - ${data[i].emoji || '<i>emoji не установлен</i>'}`
+    }
+
+    return result
+}
+
 module.exports = {
     start,
     help,
@@ -150,5 +302,10 @@ module.exports = {
     confirmInst,
     startArticlesTutorial,
     startCardsTutorial,
-    updateInstDatas
+    updateInstDatas,
+    aboutMeCom,
+    setTelegramCom,
+    setMailCom,
+    showInterests,
+    addInterest
 }

@@ -17,13 +17,13 @@ const getUserProfile = async (user)=>{
         if(document.querySelector('div._aa_c>span._aacl._aaco._aacw._aacx._aad7._aade')){
             return document.querySelector('div._aa_c>span._aacl._aaco._aacw._aacx._aad7._aade').textContent
         }
-        return 'none'
+        return 'User'
     })
     nick = await page.evaluate(() => {
         if(document.querySelector('h2.x1lliihq.x1plvlek.xryxfnj.x1n2onr6.x193iq5w.xeuugli.x1fj9vlw.x13faqbe.x1vvkbs.x1s928wv.xhkezso.x1gmr53x.x1cpjm7i.x1fgarty.x1943h6x.x1i0vuye.x1ms8i2q.xo1l8bm.x5n08af.x4zkp8e.xw06pyt.x10wh9bi.x1wdrske.x8viiok.x18hxmgj')){
             return document.querySelector('h2.x1lliihq.x1plvlek.xryxfnj.x1n2onr6.x193iq5w.xeuugli.x1fj9vlw.x13faqbe.x1vvkbs.x1s928wv.xhkezso.x1gmr53x.x1cpjm7i.x1fgarty.x1943h6x.x1i0vuye.x1ms8i2q.xo1l8bm.x5n08af.x4zkp8e.xw06pyt.x10wh9bi.x1wdrske.x8viiok.x18hxmgj').textContent
         }
-        return 'none'
+        return 'nick'
     })
 
     publicationsCount = await page.evaluate(() => {
@@ -51,7 +51,7 @@ const getUserProfile = async (user)=>{
         if(document.querySelector('div._aa_c>h1._aacl._aaco._aacu._aacx._aad6._aade')){
             return document.querySelector('div._aa_c>h1._aacl._aaco._aacu._aacx._aad6._aade').textContent
         }
-        return 'none'
+        return 'always EBASH'
     })
     
     setTimeout(async ()=>{
