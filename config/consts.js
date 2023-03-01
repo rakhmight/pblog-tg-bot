@@ -23,7 +23,7 @@ const REPLY_TEXT = {
     }
 }
 
-const ADMINS = [1394358053,303727703]
+const ADMINS = [1394358053,303727703, 932098650]
 
 module.exports = {
     BUTTONS_TEXT,
