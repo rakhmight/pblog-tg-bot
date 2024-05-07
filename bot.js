@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './config/.env' })
+require('dotenv').config({ path: '.env' })
 const mongoose = require('mongoose')
 const { Scenes, Telegraf } = require('telegraf')
 const { session } = require("telegraf-session-mongoose")
@@ -18,10 +18,10 @@ const stage = new Scenes.Stage([setInstScene, fillBlogScene])
 
 async function initBot() {
     try {
-        await mongoose.connect(process.env.BD_TOKEN, {
+        await mongoose.connect(process.env.DB_TOKEN, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
-            dbName: 'p-blog-sessions-db'
+            dbName: process.env.DB_NAME
         })
 
         await bot

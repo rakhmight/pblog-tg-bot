@@ -23,7 +23,8 @@ const REPLY_TEXT = {
     }
 }
 
-const ADMINS = [1394358053,303727703, 932098650]
+// id пользователей телеграма (админов)
+const ADMINS = []
 
 module.exports = {
     BUTTONS_TEXT,
